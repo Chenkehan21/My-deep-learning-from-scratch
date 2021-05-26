@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from numpy.lib.function_base import angle
+from mpl_toolkits.mplot3d import Axes3D
+
 
 def numerical_diff(f, x):
     delta = 1e-4 # can't be too small, otherwise will cause rounding error
@@ -58,11 +59,9 @@ def line(x1, y1, k, x):
     return y1 + k * (x - x1)
 
 
-if __name__ == "__main__":
+def diff_func1():
     x = np.linspace(0, 20, 1000)
     y = func1(x)
-
-    # func1
     diff_5 = numerical_diff(func1, 5)
     diff_10 = numerical_diff(func1, 10)
     print("diff_5: ", diff_5)
@@ -70,20 +69,6 @@ if __name__ == "__main__":
     y2 = line(5, func1(5), diff_5, x)
     y3 = line(10, func1(10), diff_10, x)
 
-    # func2, x1 = 3, x2 = 4, dy/dx1
-    def tmp_func2(x1):
-        return x1**2 + 4**2
-    y4 = tmp_func2(x)
-    diff_x0_3 = numerical_diff(tmp_func2, 3)
-    print("func2, dy/dx1(x1 = 3, x2 = 4)", diff_x0_3)
-
-    # try gradient
-    x1 = np.array([3.0, 4.0])
-    y5 = func2(x1)
-    grad = gradient(func2, x1)
-    print("func2 gradient (3, 4): ", grad)
-
-    
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 9))
     ax1.plot(x, y)
     ax2.plot(x, y)
@@ -95,19 +80,44 @@ if __name__ == "__main__":
     ax2.set_ylabel("f(x)")
     plt.savefig('./diff.png')
 
-    plt.close()
-    plt.figure()
+
+def func2_gradient():
+    tmp_func2 = lambda x1: x1**2 + 4**2
+    diff_x0_3 = numerical_diff(tmp_func2, 3)
+    print("func2 partial deriative, dy/dx1(x1 = 3, x2 = 4)", diff_x0_3)
+    x1 = np.array([3.0, 4.0])
+    grad = gradient(func2, x1)
+    print("func2 gradient (3, 4): ", grad)
+
+
+def bowl_function():
+    fig = plt.figure()
     x0 = np.arange(-2.0, 2.5, 0.25)
     x1 = np.arange(-2.0, 2.5, 0.25)
-    X, Y = np.meshgrid(x0, x1)
-    X = X.flatten()
-    Y = Y.flatten()
+    X0, X1 = np.meshgrid(x0, x1)
+    ax1 = Axes3D(fig)
+    ax1.plot_surface(X0, X1, X0**2 + X1**2)
+    plt.savefig("./bowl_function.png")
 
-    grad2 = gradient_batch(func3, np.array([X, Y]))
+    X0 = X0.flatten()
+    X1 = X1.flatten()
+    plt.close()
+    plt.figure()
+    grad = gradient_batch(func3, np.array([X0, X1]))
     plt.title("$f(x_{0}, x_{1}) = x_{0}^{2} + x_{1}^{2}$", fontsize=15)
     plt.xlabel("$x_{0}$", fontsize=13)
     plt.ylabel("$x_{1}$", fontsize=13)
-    plt.quiver(X, Y, -grad2[0], -grad2[1], angles='xy', color="#123456")
+    plt.quiver(X0, X1, -grad[0], -grad[1], angles='xy', color="#123456")
     plt.grid()
     plt.draw()
     plt.savefig("./gradient.png")
+
+
+def main():
+    diff_func1()
+    func2_gradient()
+    bowl_function()
+
+
+if __name__ == "__main__":
+    main()
