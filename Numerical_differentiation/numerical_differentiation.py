@@ -97,6 +97,9 @@ def bowl_function():
     X0, X1 = np.meshgrid(x0, x1)
     ax1 = Axes3D(fig)
     ax1.plot_surface(X0, X1, X0**2 + X1**2)
+    ax1.set_xlabel("$x_{0}$")
+    ax1.set_ylabel("$y_{0}$")
+    ax1.set_title("$f(x_{0}, x_{1}) = x_{0}^{2} + x_{1}^2$")
     plt.savefig("./bowl_function.png")
 
     X0 = X0.flatten()
