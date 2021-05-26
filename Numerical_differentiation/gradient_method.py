@@ -37,5 +37,6 @@ def main():
     ax1.scatter(histroy[:, 0], histroy[:, 1], value, alpha=1.0, c='r')
     plt.savefig("./gradient_descent.png")
 
+
 if __name__ == "__main__":
     main()
