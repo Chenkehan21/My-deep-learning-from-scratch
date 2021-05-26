@@ -15,7 +15,7 @@ def step_function_numpy(x):
 
 
 # numpy array can be input, broadcast
-def sigmoid(x):
+def Sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
 
@@ -28,7 +28,7 @@ if __name__ == "__main__":
     fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(60, 10))
     x = np.linspace(-10, 10, 1000)
     y1 = step_function_numpy(x)
-    y2 = sigmoid(x)
+    y2 = Sigmoid(x)
     y3 = ReLU(x)
     ax1.plot(x, y1)
     ax1.set_title('step function')

@@ -1,7 +1,7 @@
 from operator import ne
 import sys, os
 sys.path.append(os.pardir)
-from Activate_functions.activate_functions import sigmoid, ReLU
+from Activate_functions.activate_functions import Sigmoid, ReLU
 from Output_layers.output_layers import identify_function, safe_softmax, softmax
 import numpy as np
 
@@ -21,7 +21,7 @@ class Net:
         x = np.dot(x, self.network['w1']) + self.network['b1']
         x = ReLU(x)
         x = np.dot(x, self.network['w2']) + self.network['b2']
-        x = sigmoid(x)
+        x = Sigmoid(x)
         x = np.dot(x, self.network['w3']) + self.network['b3']
         res = softmax(x)
         return res

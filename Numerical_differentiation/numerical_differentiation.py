@@ -16,13 +16,9 @@ def gradient(f, x):
         tmp = x[idx]
         x[idx] = float(tmp) + delta # use array to calculate directly
         f1 = f(x)
-
         x[idx] = tmp - delta
         f2 = f(x)
-        # tmp = (f1 - f2) / (2 * delta)
-        # print("tmp in gradient: ", tmp)
         grad[idx] = (f1 - f2) / (2 * delta)
-
         x[idx] = tmp
 
     return grad
