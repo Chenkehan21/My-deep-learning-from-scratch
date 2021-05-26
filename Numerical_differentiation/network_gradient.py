@@ -6,6 +6,7 @@ from Activate_functions.activate_functions import ReLU, Sigmoid
 from Loss_functions.loss_functions import mse_loss, cross_entropy_loss, cross_entropy_loss_one_hot
 from Numerical_differentiation.numerical_differentiation import gradient_batch
 
+
 def main():
     input = np.random.random((3, 4))
     input_shape = input.shape[1]
