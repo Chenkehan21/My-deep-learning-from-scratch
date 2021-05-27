@@ -12,7 +12,7 @@ from Numerical_differentiation.numerical_differentiation import gradient_batch
 
 
 BATCH_SIZE = 128
-LEARNING_RATE = 0.01
+LEARNING_RATE = 0.15
 EPOCH = 10000
 
 (train_data, train_labels), (test_data, test_labels) =\
