@@ -23,7 +23,7 @@ class Net:
         x = np.dot(x, self.network['w2']) + self.network['b2']
         x = Sigmoid(x)
         x = np.dot(x, self.network['w3']) + self.network['b3']
-        res = softmax(x)
+        res = safe_softmax(x)
         return res
 
 
