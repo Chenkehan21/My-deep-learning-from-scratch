@@ -57,7 +57,6 @@ def train(net):
     loss_list = []
     train_acc_list, test_acc_list = [], []
     for epoch in range(EPOCH):
-        print(epoch)
         batch_mask = np.random.choice(train_data.shape[0], BATCH_SIZE)
         train_data_batch = train_data[batch_mask] # batch_mask is an numpy array and can be used as mask
         train_labels_batch = train_labels[batch_mask]
