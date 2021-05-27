@@ -79,7 +79,7 @@ def train(net):
             if test_acc > best_test_acc:
                 print("update network %.6f%% -> %.6f%%" % (best_test_acc * 100, test_acc * 100))
                 with open("./try_learning_networks/network_%.3f.pickle" % (test_acc), "wb") as f:
-                    pickle.dump(f)
+                    pickle.dump([net.network, net.grads], f)
     
             plt.figure()
             x = np.arange(len(train_acc_list))
