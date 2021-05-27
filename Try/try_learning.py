@@ -1,5 +1,6 @@
 import sys, os
 sys.path.append(os.pardir)
+import pickle
 import numpy as np
 import matplotlib.pyplot as plt
 from MNIST_Dataset.load_data import load_mnist
@@ -54,6 +55,7 @@ class Network(Net):
 
 def train(net):
     print("start training")
+    best_test_acc = -10.0
     loss_list = []
     train_acc_list, test_acc_list = [], []
     for epoch in range(EPOCH):
@@ -74,27 +76,31 @@ def train(net):
             test_acc_list.append(test_acc)
             print("epoch: %d|  train accuracy: %.6f%%" % (epoch, train_acc * 100))
             print("epoch: %d|  test accuracy: %.6f%%" % (epoch, test_acc * 100))
+            if test_acc > best_test_acc:
+                print("update network %.6f%% -> %.6f%%" % (best_test_acc * 100, test_acc * 100))
+                with open("./try_learning_networks/network_%.3f.pickle" % (test_acc), "wb") as f:
+                    pickle.dump(f)
+    
+            plt.figure()
+            x = np.arange(len(train_acc_list))
+            plt.plot(x, train_acc_list, label='train acc', color='b')
+            plt.plot(x, test_acc_list, label='test acc', color='r')
+            plt.xlabel("epoch")
+            plt.ylabel("accuracy")
+            plt.legend()
+            plt.savefig("./try_learning_figures/try_learning_acc_%d.png" % epoch)
+
+            plt.close()
+            plt.figure()
+            x = np.arange(len(loss_list))
+            plt.plot(x, loss_list, label='train loss')
+            plt.xlabel("epoch")
+            plt.ylabel("loss")
+            plt.legend()
+            plt.savefig("./try_learning_figures/try_learning_loss_%d.png" % epoch)
+            print("save figures done!")
+
     print("training done!")
-
-    plt.figure()
-    x = np.arange(len(train_acc_list))
-    plt.plot(x, train_acc_list, label='train acc', color='b')
-    plt.plot(x, test_acc_list, label='test acc', color='r')
-    plt.xlabel("epoch")
-    plt.ylabel("accuracy")
-    plt.legend()
-    plt.savefig("./try_learning_acc.png")
-
-    plt.close()
-    plt.figure()
-    x = np.arange(len(loss_list))
-    plt.plot(x, loss_list, label='train loss')
-    plt.xlabel("epoch")
-    plt.ylabel("loss")
-    plt.legend()
-    plt.savefig("./try_learning_loss.png")
-
-    print("save figures done!")
 
 
 def main():
