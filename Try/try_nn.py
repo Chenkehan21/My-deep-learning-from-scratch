@@ -10,11 +10,18 @@ class Net:
     def __init__(self, input_shape, output_shape, batch_size, hidden_size):
         self.network = {}
         self.network['w1'] = np.random.random((input_shape, hidden_size))
-        self.network['b1'] = np.random.random((batch_size, hidden_size))
+        ''' self.network['b1'] = np.zeros(hidden_size): it will be broadcast 
+        to all dimensions.
+        Don't use: 
+        self.network['b1'] = np.random.random((batch_size, hidden_size)) !
+        because it requires all inputs meet batch_size, however the last 
+        part of dataset may not meet batch size!!
+        '''
+        self.network['b1'] = np.zeros(hidden_size)
         self.network['w2'] = np.random.random((hidden_size, hidden_size))
-        self.network['b2'] = np.random.random((batch_size, hidden_size))
+        self.network['b2'] = np.zeros(hidden_size)
         self.network['w3'] = np.random.random((hidden_size, output_shape))
-        self.network['b3'] = np.random.random((batch_size, output_shape))
+        self.network['b3'] = np.zeros(output_shape)
 
 
     def forward(self, x):
