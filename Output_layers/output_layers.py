@@ -9,10 +9,18 @@ def softmax(x):
     return exp / exp_sum
 
 def safe_softmax(x):
-    c = np.max(x)
-    exp = np.exp(x - c)
-    exp_sum = np.sum(exp)
-    return exp / exp_sum
+    '''if x is a batch of data, we need to subtract the max value by batch
+    however in numpy it's only allowed to broadcast beween (a, b) and (b,)
+    so we need to transpose input!
+    '''
+    if x.ndim == 2:
+        x = x.T
+        x -= np.max(x, axis=0)
+        y = np.exp(x) / np.sum(np.exp(x), axis=0)
+        return y.T
+    
+    x -= np.max(x)
+    return np.exp(x) / np.sum(np.exp(x))
 
 
 if __name__ == "__main__":

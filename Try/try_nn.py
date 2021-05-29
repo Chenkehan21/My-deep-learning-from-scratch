@@ -7,9 +7,10 @@ import numpy as np
 
 
 class Net:
-    def __init__(self, input_shape, output_shape, batch_size, hidden_size):
+    def __init__(self, input_shape, output_shape, hidden_size, weight_init_std):
         self.network = {}
-        self.network['w1'] = np.random.random((input_shape, hidden_size))
+        self.network['w1'] = np.random.randn(input_shape, hidden_size) * weight_init_std
+        
         ''' self.network['b1'] = np.zeros(hidden_size): it will be broadcast 
         to all dimensions.
         Don't use: 
@@ -18,9 +19,9 @@ class Net:
         part of dataset may not meet batch size!!
         '''
         self.network['b1'] = np.zeros(hidden_size)
-        self.network['w2'] = np.random.random((hidden_size, hidden_size))
+        self.network['w2'] = np.random.randn(hidden_size, hidden_size) * weight_init_std
         self.network['b2'] = np.zeros(hidden_size)
-        self.network['w3'] = np.random.random((hidden_size, output_shape))
+        self.network['w3'] = np.random.randn(hidden_size, output_shape) * weight_init_std
         self.network['b3'] = np.zeros(output_shape)
 
 
@@ -38,7 +39,8 @@ if __name__ == "__main__":
     input = np.random.random((10, 4))
     input_shape = input.shape[1]
     output_shape = 10
-    batch_size = input.shape[0]
-    net = Net(input_shape, output_shape, batch_size, 50)
+    hidden_size = 50
+    weight_init_std = 0.01
+    net = Net(input_shape, output_shape, hidden_size, weight_init_std)
     res = net.forward(input)
     print(res)
