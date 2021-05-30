@@ -7,9 +7,14 @@ import numpy as np
 
 
 class Net:
-    def __init__(self, input_shape, output_shape, hidden_size, weight_init_std):
+    def __init__(self, input_shape, output_shape, hidden_size, weight_init_std=0.01):
         self.network = {}
-        self.network['w1'] = np.random.randn(input_shape, hidden_size) * weight_init_std
+
+        '''remember to use proper weight initialize paramemter.
+        sigmoid and tanh: use Xavier initialization, standard devation = 1 / sqrt(n), n is the number of neurals of last layer
+        relu: use He initialization, standard devation = 2 / sqrt(n).
+        '''
+        self.network['w1'] = np.random.randn(input_shape, hidden_size) * weight_init_std / np.sqrt(input_shape)
         
         ''' self.network['b1'] = np.zeros(hidden_size): it will be broadcast 
         to all dimensions.
@@ -19,9 +24,9 @@ class Net:
         part of dataset may not meet batch size!!
         '''
         self.network['b1'] = np.zeros(hidden_size)
-        self.network['w2'] = np.random.randn(hidden_size, hidden_size) * weight_init_std
+        self.network['w2'] = np.random.randn(hidden_size, hidden_size) * weight_init_std / np.sqrt(hidden_size)
         self.network['b2'] = np.zeros(hidden_size)
-        self.network['w3'] = np.random.randn(hidden_size, output_shape) * weight_init_std
+        self.network['w3'] = np.random.randn(hidden_size, output_shape) * weight_init_std / np.sqrt(hidden_size)
         self.network['b3'] = np.zeros(output_shape)
 
 
