@@ -1,3 +1,5 @@
+import sys, os
+sys.path.append(os.pardir)
 import numpy as np
 from convertions import img2col, col2img
 
