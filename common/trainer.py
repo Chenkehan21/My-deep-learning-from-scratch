@@ -79,8 +79,9 @@ class Trainer:
     def gradient_check(self):
         data = self.train_data[:3]
         label = self.train_labels[:3]
-        gradient_numerical = self.net.numerical_gradient(data, label)
-        gradient_bp = self.net.gradient_bp(data, label)
-        for key in self.net.network:
+        # print(data.shape)
+        gradient_numerical = self.network.gradient_numerical(data, label)
+        gradient_bp = self.network.gradient(data, label)
+        for key in self.network.params.keys():
             diff = np.average(np.abs(gradient_numerical[key] - gradient_bp[key]))
             print(str(key) + " difference: ",  diff)

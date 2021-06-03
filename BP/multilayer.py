@@ -67,6 +67,7 @@ class AffineLyaer:
         self.dw = None
         self.db = None
     
+    '''
     def forward(self, x):
         self.x = x
         return np.dot(x, self.w) + self.b
@@ -76,6 +77,25 @@ class AffineLyaer:
         self.dw = np.dot(self.x.T, dout)
         self.db = np.sum(dout, axis=0) # pay attention to db here, should sum along axis 0
         return self.dx
+    '''
+
+    def forward(self, x):
+        # 对应张量
+        self.original_x_shape = x.shape
+        x = x.reshape(x.shape[0], -1)
+        self.x = x
+
+        out = np.dot(self.x, self.w) + self.b
+
+        return out
+
+    def backward(self, dout):
+        dx = np.dot(dout, self.w.T)
+        self.dw = np.dot(self.x.T, dout)
+        self.db = np.sum(dout, axis=0)
+        
+        dx = dx.reshape(*self.original_x_shape)  # 还原输入数据的形状（对应张量）
+        return dx
 
 
 class SoftmaxWithLoss:

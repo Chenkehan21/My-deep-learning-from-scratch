@@ -14,7 +14,7 @@ class LayerBuilder:
         self.hidden_size_list = hidden_size_list
         self.hidden_layers_num = len(self.hidden_size_list)
         self.batch_size = batch_size
-        self.activation_layer = activation_layer
+        self.activation_layer = str(activation_layer).lower()
         self.weight_init_std = weight_init_std
         self.weight_decay_lambda = weight_decay_lambda
         self.params = {}
@@ -22,9 +22,9 @@ class LayerBuilder:
 
         activation_layers = {"sigmoid": SigmoidLayer, "relu":ReLULayer}
         self.layers = {}
-        for idx in range(1, self.hidden_layers_num):
+        for idx in range(1, self.hidden_layers_num + 1):
             self.layers["affine" + str(idx)] = AffineLyaer(self.params["w" + str(idx)], self.params["b" + str(idx)])
-            self.layers["activation" + str(idx)] = activation_layers[activation_layer]()
+            self.layers["activation" + str(idx)] = activation_layers[self.activation_layer]()
 
         idx = self.hidden_layers_num + 1
         self.layers["affine" + str(idx)] = AffineLyaer(self.params["w" + str(idx)], self.params["b" + str(idx)])
@@ -52,7 +52,7 @@ class LayerBuilder:
         weight_decay = 0
         for idx in range(1, self.hidden_layers_num + 2): # consider last affine layer and softmaxwithloss layer
             w = self.params["w" + str(idx)]
-            weight_decay += 0.5 * self.weight_decay_lambda * w**2
+            weight_decay += 0.5 * self.weight_decay_lambda * np.sum(w**2)
         loss = self.lastlayer.forward(y, t) + weight_decay
         
         return loss
@@ -72,7 +72,7 @@ class LayerBuilder:
 
         dout = 1
         dout = self.lastlayer.backward(dout)
-        layers = self.layers.values()
+        layers = list(self.layers.values())
         layers.reverse()
 
         for layer in layers:
@@ -80,15 +80,16 @@ class LayerBuilder:
         
         grads = {}
         for idx in range(1, self.hidden_layers_num + 2):
-            self.params["w" + str(idx)] = self.layers["w" + str(idx)].dw + self.weight_decay_lambda * self.params["w" + str(idx)].w
-            self.params["b" + str(idx)] = self.params["b" + str(idx)].db
+            grads["w" + str(idx)] = self.layers["affine" + str(idx)].dw + self.weight_decay_lambda * self.layers["affine" + str(idx)].w
+            grads["b" + str(idx)] = self.layers["affine" + str(idx)].db
             
         return grads
 
     def gradient_numerical(self, x, t):
         loss_func = lambda w: self.loss(x, t)
         grads = {}
-        for key in self.params.keys():
-            grads[key] = numerical_gradient(loss_func, x)
+        for idx in range(1, self.hidden_layers_num + 2):
+            grads["w" + str(idx)] = numerical_gradient(loss_func, self.params["w" + str(idx)])
+            grads["b" + str(idx)] = numerical_gradient(loss_func, self.params["b" + str(idx)])
         
         return grads
