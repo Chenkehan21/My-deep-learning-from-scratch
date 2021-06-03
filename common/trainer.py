@@ -3,15 +3,15 @@ sys.path.append(os.pardir)
 import pickle
 import numpy as np
 import matplotlib.pyplot as plt
-
-
-os.mkdir('./figures/', exist_ok=True)
-os.mkdir('./network_files/', exist_ok=True)
+import time
 
 
 class Trainer:
     def __init__(self, train_data, train_labels, test_data, test_labels,
                  network, batch_size=128, epochs=50, optimizer="SGD", optimizer_params={"lr": 1e-3}):
+        t = time.time() % 100
+        os.makedirs("./figures_%.4f/" % t, exist_ok=True)
+        os.makedirs("./network_files_%.4f/" % t, exist_ok=True)
         self.train_data = train_data
         self.train_labels = train_labels
         self.test_data = test_data

@@ -3,6 +3,7 @@ sys.path.append(os.pardir)
 import numpy as np
 from collections import OrderedDict
 from BP.multilayer import AffineLyaer, SigmoidLayer, ReLULayer, SoftmaxWithLoss
+from Numerical_differentiation.numerical_differentiation import numerical_gradient
 
 
 class LayerBuilder:
@@ -14,10 +15,10 @@ class LayerBuilder:
         self.hidden_layers_num = len(self.hidden_size_list)
         self.batch_size = batch_size
         self.activation_layer = activation_layer
-        self.weigh_init_std = weight_init_std
+        self.weight_init_std = weight_init_std
         self.weight_decay_lambda = weight_decay_lambda
         self.params = {}
-        self._init_layers()
+        self._init_layers(self.weight_init_std)
 
         activation_layers = {"sigmoid": SigmoidLayer, "relu":ReLULayer}
         self.layers = {}
@@ -30,7 +31,7 @@ class LayerBuilder:
         self.lastlayer = SoftmaxWithLoss()
 
     def _init_layers(self, weight_init_std):
-        all_layers_list = [self.input_shape] + len(self.hidden_size) + [self.output_shape]
+        all_layers_list = [self.input_shape] + self.hidden_size_list + [self.output_shape]
         for idx in range(1, len(all_layers_list)):
             if str(weight_init_std).lower() in ('relu', 'he'):
                 scale = np.sqrt(2.0 / all_layers_list[idx - 1])
@@ -43,6 +44,7 @@ class LayerBuilder:
     def predict(self, x):
         for layer in self.layers.values():
             x = layer.forward(x)
+        
         return x
 
     def loss(self, x, t):
@@ -51,8 +53,8 @@ class LayerBuilder:
         for idx in range(1, self.hidden_layers_num + 2): # consider last affine layer and softmaxwithloss layer
             w = self.params["w" + str(idx)]
             weight_decay += 0.5 * self.weight_decay_lambda * w**2
-        
         loss = self.lastlayer.forward(y, t) + weight_decay
+        
         return loss
 
     def accuracy(self, x, t):
@@ -62,6 +64,7 @@ class LayerBuilder:
             y = np.argmax(y, axis=1)
             if y == t[idx : self.batch_size + idx]:
                 correct += 1
+        
         return correct / t.shape[0]
 
     def gradient(self, x, t):
@@ -80,4 +83,12 @@ class LayerBuilder:
             self.params["w" + str(idx)] = self.layers["w" + str(idx)].dw + self.weight_decay_lambda * self.params["w" + str(idx)].w
             self.params["b" + str(idx)] = self.params["b" + str(idx)].db
             
+        return grads
+
+    def gradient_numerical(self, x, t):
+        loss_func = lambda w: self.loss(x, t)
+        grads = {}
+        for key in self.params.keys():
+            grads[key] = numerical_gradient(loss_func, x)
+        
         return grads
