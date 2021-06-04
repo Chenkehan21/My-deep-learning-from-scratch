@@ -4,6 +4,7 @@ import pickle
 import numpy as np
 import matplotlib.pyplot as plt
 import time
+from Optimizers.optimizers import *
 
 
 class Trainer:
@@ -19,9 +20,12 @@ class Trainer:
         self.network = network
         self.batch_size = batch_size
         self.epochs = epochs
-        self.optimzer = optimizer
-        self.optimizer_params = optimizer_params
         self.check_per_epoch = max(1, self.train_data.shape[0] / self.batch_size)
+
+        # optimizer
+        optimizer_dict = {"sgd": SGD, "momentum": Momentum, "adagrad": AdaGrad, "adam": Adam, "rmsprop": RMSProp}
+        self.optimizer = optimizer_dict[str(optimizer).lower()](**optimizer_params)
+
         self.loss_list = []
         self.train_acc_list = []
         self.test_acc_list = []
@@ -36,8 +40,12 @@ class Trainer:
             train_data_batch = self.train_data[batch_mask] # batch_mask is an numpy array and can be used as mask
             train_labels_batch = self.train_labels[batch_mask]
             grads = self.net.gradient_bp(train_data_batch, train_labels_batch)
-            for key in self.net.network:
-                self.net.network[key] -= self.optimizer_params["lr"] * grads[key]
+
+            # for key in self.net.network:
+            #     self.net.network[key] -= self.optimizer_params["lr"] * grads[key]
+
+            self.optimizer.step(self.network.params, grads)
+
             loss = self.net.loss(train_data_batch, train_labels_batch)
             self.loss_list.append(loss)
             print("iteration: %d|  loss: %.6f" % (i, loss))
