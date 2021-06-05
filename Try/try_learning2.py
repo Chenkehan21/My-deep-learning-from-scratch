@@ -11,9 +11,9 @@ BATCH_SIZE = 128
 HIDDEN_SIZE = 100
 EPOCH = 50
 OPTIMIZER = "SGD"
-LEARNING_RATE = 1e-3
+LEARNING_RATE = 0.01
 ACTIVATION_LAYER = "ReLU"
-WEIGHT_DECAY_LAMBDA = 0.1 # it should be a small value otherwise (like 0.9) the network will learn nothing.
+WEIGHT_DECAY_LAMBDA = 6.455 * 1e-8
 WEIGHT_INIT_STD = "ReLU"
 
 

@@ -9,13 +9,15 @@ from Optimizers.optimizers import *
 
 class Trainer:
     def __init__(self, train_data, train_labels, test_data, test_labels,
-                 network, batch_size=128, epochs=50, optimizer="SGD", optimizer_params={"lr": 1e-3}):
-        t = time.time() % 100
-        self.figure_path = "./figures_%.4f/" % t
-        self.network_path = "./network_files_%.4f/" % t
-        os.makedirs(self.figure_path, exist_ok=True)
-        os.makedirs(self.network_path, exist_ok=True)
-        print("t: %.4f" % t)
+                 network, batch_size=128, epochs=50, optimizer="SGD", optimizer_params={"lr": 1e-3}, to_save=True):
+        self.to_save = to_save
+        if self.to_save:
+            t = time.time() % 100
+            self.figure_path = "./figures_%.4f/" % t
+            self.network_path = "./network_files_%.4f/" % t
+            os.makedirs(self.figure_path, exist_ok=True)
+            os.makedirs(self.network_path, exist_ok=True)
+            print("t: %.4f" % t)
         
         self.train_data = train_data
         self.train_labels = train_labels
@@ -24,7 +26,7 @@ class Trainer:
         self.network = network
         self.batch_size = batch_size
         self.epochs = epochs
-        self.check_per_epoch = max(1, self.train_data.shape[0] / self.batch_size)
+        self.check_per_epoch = max(1, int(self.train_data.shape[0] / self.batch_size))
 
         # optimizer
         optimizer_dict = {"sgd": SGD, "momentum": Momentum, "adagrad": AdaGrad, "adam": Adam, "rmsprop": RMSProp}
@@ -37,7 +39,7 @@ class Trainer:
     def train(self):
         print("start training")
         best_test_acc = -10.0
-        max_iter = int(self.epochs * self.check_per_epoch)
+        max_iter = self.epochs * self.check_per_epoch
         epoch = 0
         for i in range(max_iter):
             batch_mask = np.random.choice(self.train_data.shape[0], self.batch_size)
@@ -65,27 +67,30 @@ class Trainer:
                 if test_acc > best_test_acc:
                     print("update network %.6f%% -> %.6f%%" % (best_test_acc * 100, test_acc * 100))
                     best_test_acc = test_acc
-                    with open(self.network_path + "network_%.3f.pickle" % (test_acc), "wb") as f:
-                        pickle.dump([self.network.params, grads], f)
-        
-                plt.figure()
-                x = np.arange(len(self.train_acc_list))
-                plt.plot(x, self.train_acc_list, label='train acc', color='b')
-                plt.plot(x, self.test_acc_list, label='test acc', color='r')
-                plt.xlabel("epoch")
-                plt.ylabel("accuracy")
-                plt.legend()
-                plt.savefig(self.figure_path + "/try_learning_bp_acc_%d.png" % epoch)
+                    if self.to_save:
+                        with open(self.network_path + "network_%.6f.pickle" % (test_acc), "wb") as f:
+                            pickle.dump([self.network.params, grads], f)
 
-                plt.close()
-                plt.figure()
-                x = np.arange(len(self.loss_list))
-                plt.plot(x, self.loss_list, label='train loss')
-                plt.xlabel("epoch")
-                plt.ylabel("loss")
-                plt.legend()
-                plt.savefig(self.figure_path + "try_learning_bp_loss_%d.png" % epoch)
-                print("save figures done!")
+                if self.to_save:
+                    plt.figure()
+                    x = np.arange(len(self.train_acc_list))
+                    plt.plot(x, self.train_acc_list, label='train acc', color='b')
+                    plt.plot(x, self.test_acc_list, label='test acc', color='r')
+                    plt.yticks(np.arange(0.0, 1.1, 0.1))
+                    plt.xlabel("epoch")
+                    plt.ylabel("accuracy")
+                    plt.legend()
+                    plt.savefig(self.figure_path + "/try_learning_bp_acc_%d.png" % epoch)
+
+                    plt.close()
+                    plt.figure()
+                    x = np.arange(len(self.loss_list))
+                    plt.plot(x, self.loss_list, label='train loss')
+                    plt.xlabel("epoch")
+                    plt.ylabel("loss")
+                    plt.legend()
+                    plt.savefig(self.figure_path + "try_learning_bp_loss_%d.png" % epoch)
+                    print("save figures done!")
 
         print("training done!")
 
