@@ -80,7 +80,7 @@ class AffineLyaer:
     '''
 
     def forward(self, x):
-        # 对应张量
+        # for high dimension tensor
         self.original_x_shape = x.shape
         x = x.reshape(x.shape[0], -1)
         self.x = x
@@ -94,7 +94,7 @@ class AffineLyaer:
         self.dw = np.dot(self.x.T, dout)
         self.db = np.sum(dout, axis=0)
         
-        dx = dx.reshape(*self.original_x_shape)  # 还原输入数据的形状（对应张量）
+        dx = dx.reshape(*self.original_x_shape)  # restor the shape of input(for high dimension tensor)
         return dx
 
 
