@@ -62,8 +62,9 @@ class LayerBuilder:
         for idx in range(0, len(x), self.batch_size):
             y = self.predict(x[idx : self.batch_size + idx])
             y = np.argmax(y, axis=1)
-            if y == t[idx : self.batch_size + idx]:
-                correct += 1
+            # print("y: ", y)
+            # print("label: ", t[idx : idx + self.batch_size])
+            correct += np.sum(y == t[idx : idx + self.batch_size])
         
         return correct / t.shape[0]
 
