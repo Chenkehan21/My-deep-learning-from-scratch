@@ -13,7 +13,7 @@ EPOCH = 50
 OPTIMIZER = "SGD"
 LEARNING_RATE = 1e-3
 ACTIVATION_LAYER = "ReLU"
-WEIGHT_DECAY_LAMBDA = 0.1
+WEIGHT_DECAY_LAMBDA = 0.1 # it should be a small value otherwise (like 0.9) the network will learn nothing.
 WEIGHT_INIT_STD = "ReLU"
 
 
