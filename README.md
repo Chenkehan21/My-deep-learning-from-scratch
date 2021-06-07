@@ -43,3 +43,22 @@
 
 - ./Try/try_cnn：使用了参考书中的代码，训练了两次。第一次采用学习率0.001，训练了20个epoch，准确率达到98.71%，结果在./Try/figures_14.8826 和 ./Try/network_files_14.8826。第二次采用学习率0.01，训练了60个epoch，准确率达到了99.2%，结果在./Try/figures_73.384 和 ./Try_network_files_73.384/
 
+## 总结
+
+![Getting Started](./Try/figures_14.8826/try_learning_bp_acc_10.png)
+
+
+```mermaid
+graph LR;
+    A[deep learning from scratch]-->B[Multi Layer Perceptrons];
+    A-->C[neural network];
+    C-->D[activation layers:<br/>must use nonlinear fucntion, <br> since several linear function can be <br/>replayed by one linear function];
+    D-->D1[ReLU];
+    D-->D2[Sigmoid];
+    D-->D3[...];
+    C-->E[Affine layers or Fully Connect layer];
+    C-->F[output layers];
+    F-->F1["Softmax(0, 1)<br/>probabolity -> sum to 1"];
+    F-->F2[FC];
+    F-->F3[CrossEntropyLoss];
+```
