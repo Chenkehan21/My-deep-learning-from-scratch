@@ -47,16 +47,20 @@
 
 文中的思维导图如果无法显示请先到Chrome web store 安装Github+Mermaid插件。
 
-![Getting Started](./Try/figures_14.8826/try_learning_bp_acc_10.png)
+accuracy: 99.2%
+![Getting Started](./Try/figures_73.3841/try_learning_bp_acc_60.png)
+
+loss: 99.2%
+![Getting Started](./Try/figures_73.3841/try_learning_bp_loss_60.png)
 
 
 ```mermaid
 graph LR;
     C[neural network];
 
-    C-->x1[Convolution layers]
+    C-->x1["Convolution layers:<br/>the defect of FC layer is that it <br/>ignores the shape of data<br/> CNN generates feature map"]
 
-    C-->x2[Pooling layers]
+    C-->x2["Pooling layers<br/>:robust to small position changes"]
 
     C-->D[activation layers:<br/>must use nonlinear fucntion, <br> since several linear function can be <br/>replayed by one linear function];
 
@@ -93,9 +97,50 @@ graph LR;
     
     H-->H5["Adam:<br/> combination of AdaGrad and Momentum"];
 
-    C-->I[Overfit solution]
-    I-->I1[weight initialization]
-    I-->I2[weight decay]
-    I-->I3[batch normalization]
-    I-->I4[dropout]
+    C-->J[Overfit];
+
+    J-->J1[reasons];
+
+    J1-->J2[too much parameters];
+
+    J1-->J3[too less train data]
+
+    
+    J-->I[Overfit solution];
+    
+    I-->I1["weight initialization:<br/>can't be intitialized as zeros<br/>since in forward propgation all weights will<br/> pass same values then in back propgation<br/> all weights will update identically"];
+    
+    I1-->I5[Xavier];
+
+    I1-->I6[He];
+
+    I5-->I7[Sigmoid];
+
+    I5-->I8[Tanh];
+
+    I6-->I9[ReLU];
+
+    I1-->I10[inproper initialization];
+
+    I10-->I11[gradient vanishing];
+
+    I10-->I12[the distribution of <br/>activation values are biased];
+    
+    I12-->I13[poor feature presentation];
+
+    I-->I2[weight decay];
+    
+    I-->I3[batch normalization];
+
+    I3-->I31["idea:<br/>normalize input data: mu=0, sigma=1"<br/>then scale and shif data];
+
+    I3-->I32["benefits"];
+
+    I32-->I33[can use lager learning rate, accelerate learning];
+
+    I32-->I34[be less dependent on weight initialization];
+
+    I32-->I35["reduce overfit(use less dropout)"];
+    
+    I-->I4[dropout];
 ```
