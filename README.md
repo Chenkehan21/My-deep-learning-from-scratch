@@ -104,44 +104,23 @@ graph LR;
 
     J1-->J2[too much parameters];
 
-    J1-->J3[too less train data]
-
+    J1-->J3[too less train data];
     
     J-->I[Overfit solution];
     
     I-->I1["weight initialization:<br/>can't be intitialized as zeros<br/>since in forward propgation all weights will<br/> pass same values then in back propgation<br/> all weights will update identically"];
     
-    I1-->I5[Xavier];
+    I1-->I5["Xavier:Sigmoid, Tanh<br/>He: ReLU"];
 
-    I1-->I6[He];
-
-    I5-->I7[Sigmoid];
-
-    I5-->I8[Tanh];
-
-    I6-->I9[ReLU];
-
-    I1-->I10[inproper initialization];
-
-    I10-->I11[gradient vanishing];
-
-    I10-->I12[the distribution of <br/>activation values are biased];
-    
-    I12-->I13[poor feature presentation];
+    I1-->I10["inproper initialization:<br/>1.gradient vanishing<br/>2.the distribution of <br/>activation values are biased<br/>poor feature presentation"];
 
     I-->I2[weight decay];
     
     I-->I3[batch normalization];
 
-    I3-->I31["idea:<br/>normalize input data: mu=0, sigma=1"<br/>then scale and shif data];
+    I3-->I31["normalize input data:<br/> mu=0, sigma=1" then scale<br/> and shif data];
 
-    I3-->I32["benefits"];
-
-    I32-->I33[can use lager learning rate, accelerate learning];
-
-    I32-->I34[be less dependent on weight initialization];
-
-    I32-->I35["reduce overfit(use less dropout)"];
+    I3-->I32["benefits:<br/>1.can use lager learning rate, <br/>accelerate learning<br/>2.be less dependent on weight<br/>initialization<br/>3.reduce overfit(use less dropout)"];
     
     I-->I4[dropout];
 ```
