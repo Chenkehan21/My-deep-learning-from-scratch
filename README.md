@@ -45,6 +45,8 @@
 
 ## 总结
 
+文中的思维导图如果无法显示请先到Chrome web store 安装Github+Mermaid插件。
+
 ![Getting Started](./Try/figures_14.8826/try_learning_bp_acc_10.png)
 
 
