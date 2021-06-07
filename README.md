@@ -47,10 +47,11 @@
 
 文中的思维导图如果无法显示请先到Chrome web store 安装Github+Mermaid插件。
 
-accuracy: 99.2%
+### accuracy: 99.2%
+
 ![Getting Started](./Try/figures_73.3841/try_learning_bp_acc_60.png)
 
-loss: 99.2%
+### loss: 99.2%
 ![Getting Started](./Try/figures_73.3841/try_learning_bp_loss_60.png)
 
 
