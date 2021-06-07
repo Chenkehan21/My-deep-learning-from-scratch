@@ -45,7 +45,7 @@
 
 文中的思维导图如果无法显示请先到Chrome web store 安装Github+Mermaid插件。
 
-## accuracy and loss of the best CNN model(99.2%)
+## 三、Accuracy and loss of the best CNN model(99.2%)
 
 ### accuracy
 
@@ -55,6 +55,6 @@
 
 ![Getting Started](./Try/figures_73.3841/try_learning_bp_loss_60.png)
 
-## 总结
+## 四、总结
 
 ![Getting Started](./mindmap.jpg)
