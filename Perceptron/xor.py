@@ -6,7 +6,7 @@ x1  x2  a(x1 or x2)  b(x1 nand x2)  y(a and b) i.e. "xor"
 0    0       0            1              0
 1    0       1            1              1
 0    1       1            1              1
-1    1       1            0              0
+1    1       1            0              0 
 '''
 
 def xor(x1, x2):
