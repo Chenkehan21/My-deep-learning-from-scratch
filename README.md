@@ -43,17 +43,18 @@
 
 - ./Try/try_cnn：使用了参考书中的代码，训练了两次。第一次采用学习率0.001，训练了20个epoch，准确率达到98.71%，结果在./Try/figures_14.8826 和 ./Try/network_files_14.8826。第二次采用学习率0.01，训练了60个epoch，准确率达到了99.2%，结果在./Try/figures_73.384 和 ./Try_network_files_73.384/
 
-## 总结
-
 文中的思维导图如果无法显示请先到Chrome web store 安装Github+Mermaid插件。
 
-### accuracy: 99.2%
+## accuracy and loss of the best CNN model(99.2%)
+
+### accuracy
 
 ![Getting Started](./Try/figures_73.3841/try_learning_bp_acc_60.png)
 
-### loss: 99.2%
+### loss
 
 ![Getting Started](./Try/figures_73.3841/try_learning_bp_loss_60.png)
 
+## 总结
 
 ![Getting Started](./mindmap.jpg)
