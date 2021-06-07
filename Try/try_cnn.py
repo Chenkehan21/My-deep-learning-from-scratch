@@ -7,7 +7,7 @@ sys.path.append(os.pardir)
 import numpy as np
 import pickle
 
-from common.trainer import Trainer
+from Common.trainer import Trainer
 from Optimizers.optimizers import SGD, Momentum, AdaGrad, Adam, RMSProp
 from Convolutional_neural_networks.cnns import Convolution, Maxpooling
 from Overfit_solutions.overfit_solutions import Dropout

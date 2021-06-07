@@ -2,8 +2,8 @@ import sys
 import os
 sys.path.append(os.pardir)
 
-from common.layerBuilder import LayerBuilder
-from common.trainer import Trainer
+from Common.layerBuilder import LayerBuilder
+from Common.trainer import Trainer
 from MNIST_Dataset.load_data import load_mnist
 
 

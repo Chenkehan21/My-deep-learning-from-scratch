@@ -5,8 +5,8 @@ sys.path.append(os.pardir)
 import numpy as np
 import matplotlib.pyplot as plt
 
-from common.layerBuilder import LayerBuilder
-from common.trainer import Trainer
+from Common.layerBuilder import LayerBuilder
+from Common.trainer import Trainer
 from MNIST_Dataset.load_data import load_mnist
 
 
