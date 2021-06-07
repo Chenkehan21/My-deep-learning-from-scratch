@@ -1,73 +1,74 @@
 import sys, os
 sys.path.append(os.pardir)
 import numpy as np
-from convertions import img2col, col2img
+from convertions import im2col, col2im
 
 
-class CNN:
-    def __init__(self, kernel_size: tuple, stride=1, padding=0, bias=False):
-        self.kernel = np.random.rand(*kernel_size)
+class Convolution:
+    def __init__(self, W, b, stride=1, pad=0):
+        self.w = W
+        self.b = b
         self.stride = stride
-        self.padding = padding
-        self.bias = np.random.rand(kernel_size[1]) if bias else np.zeros(kernel_size[1])
-
-        self.x = None
+        self.pad = pad
+        
+        # 中间数据（backward时使用）
+        self.x = None   
+        self.col = None
+        self.col_W = None
+        
+        # 权重和偏置参数的梯度
         self.dw = None
         self.db = None
-        self.col = None
-        self.kernel_col = None
 
     def forward(self, x):
+        FN, C, FH, FW = self.w.shape
         N, C, H, W = x.shape
-        FN, C, FH, FW = self.kernel.shape
-        out_h = (H + 2 * self.padding - FH) // self.stride + 1
-        out_w = (W + 2 * self.padding - FW) // self.stride + 1
+        out_h = 1 + int((H + 2*self.pad - FH) / self.stride)
+        out_w = 1 + int((W + 2*self.pad - FW) / self.stride)
 
-        col = img2col(x, FH, FW, self.stride, self.padding)
-        kernel_col = self.kernel.reshape(FN, -1).T
-        res = np.dot(col, kernel_col) + self.bias # res: (N * out_h * out_w, FN)
-        res = res.reshape(N, out_h, out_w, -1).transpose(0, 3, 1, 2) # res: (N, FN, out_h, out_w)
+        col = im2col(x, FH, FW, self.stride, self.pad)
+        col_W = self.w.reshape(FN, -1).T
+
+        out = np.dot(col, col_W) + self.b
+        out = out.reshape(N, out_h, out_w, -1).transpose(0, 3, 1, 2)
 
         self.x = x
-        self.kernel_col = kernel_col
         self.col = col
+        self.col_W = col_W
 
-        return res
+        return out
 
     def backward(self, dout):
-        # dout: (N, FN, out_h, out_w)
-        FN, C, FH, FW = self.kernel.shape
+        FN, C, FH, FW = self.w.shape
+        dout = dout.transpose(0,2,3,1).reshape(-1, FN)
 
-        # turn dout to: (N * out_h * out_w, FN)
-        dout = dout.transpose(0, 2, 3, 1).reshape(-1, FN)
-
-        # CNN is a special FC, so the backward process is similar to FC.
         self.db = np.sum(dout, axis=0)
-        self.dW = np.dot(self.col.T, dout)
-        self.dW = self.dW.transpose(1, 0).reshape(FN, C, FH, FW)
-        dcol = np.dot(dout, self.kernel_col.T)
-        dx = col2img(self.x, dcol, FH, FW, self.stride, self.padding)
+        self.dw = np.dot(self.col.T, dout)
+        self.dw = self.dw.transpose(1, 0).reshape(FN, C, FH, FW)
+
+        dcol = np.dot(dout, self.col_W.T)
+        dx = col2im(dcol, self.x.shape, FH, FW, self.stride, self.pad)
 
         return dx
 
 
 class Maxpooling:
-    def __init__(self, kernel_size: int, stride=1, padding=0):
-        self.kernel = np.random.rand(kernel_size, kernel_size) # maxpooling kernel is a square by default
+    def __init__(self, pool_h, pool_w, stride=1, pad=0):
+        self.pool_h = pool_h
+        self.pool_w = pool_w
         self.stride = stride
-        self.padding = padding
-
+        self.pad = pad
+        
         self.x = None
         self.arg_max = None
 
     def forward(self, x):
         N, C, H, W = x.shape
-        FH, FW = self.kernel.shape
-        out_h = (H + 2 * self.padding - FH) // self.stride + 1
-        out_w = (W + 2 * self.padding - FW) // self.stride + 1
+        out_h = int(1 + (H - self.pool_h) / self.stride)
+        out_w = int(1 + (W - self.pool_w) / self.stride)
 
-        col = img2col(x, FH, FW, self.stride, self.padding)
-        col = col.reshape(-1, FH * FW)
+        col = im2col(x, self.pool_h, self.pool_w, self.stride, self.pad)
+        col = col.reshape(-1, self.pool_h*self.pool_w)
 
         arg_max = np.argmax(col, axis=1)
         out = np.max(col, axis=1)
@@ -75,19 +76,18 @@ class Maxpooling:
 
         self.x = x
         self.arg_max = arg_max
-        
+
         return out
 
     def backward(self, dout):
         dout = dout.transpose(0, 2, 3, 1)
-        FH, FW = self.kernel.shape
         
-        pool_size = FH * FW
+        pool_size = self.pool_h * self.pool_w
         dmax = np.zeros((dout.size, pool_size))
         dmax[np.arange(self.arg_max.size), self.arg_max.flatten()] = dout.flatten()
         dmax = dmax.reshape(dout.shape + (pool_size,)) 
         
         dcol = dmax.reshape(dmax.shape[0] * dmax.shape[1] * dmax.shape[2], -1)
-        dx = col2img(self.x, dcol, FH, FW, self.stride, self.padding)
+        dx = col2im(dcol, self.x.shape, self.pool_h, self.pool_w, self.stride, self.pad)
         
         return dx

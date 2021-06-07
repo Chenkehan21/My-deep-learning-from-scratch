@@ -1,7 +1,6 @@
 import os, sys
 sys.path.append(os.pardir)
 import numpy as np
-from collections import OrderedDict
 from BP.multilayer import AffineLyaer, SigmoidLayer, ReLULayer, SoftmaxWithLoss
 from Numerical_differentiation.numerical_differentiation import numerical_gradient
 
