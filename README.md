@@ -75,7 +75,9 @@ graph LR;
     
     F-->F2[FC];
 
-    C-->G["Loss functions:<br/>cant't use accuracy as estimation index<br/>1: accuracy is discrete;<br/>2: nudge weight parameter won't change accurace"]-->G1[CrossEntropyLoss];
+    C-->G["Loss functions:<br/>cant't use accuracy as estimation index<br/>1: accuracy is discrete;<br/> 2:nudge weight parameter won't change accurace"];
+    
+    C-->G1[CrossEntropyLoss];
     
     G-->G2[Mean Squared Error];
 
@@ -96,5 +98,4 @@ graph LR;
     I-->I2[weight decay]
     I-->I3[batch normalization]
     I-->I4[dropout]
-
 ```
