@@ -45,6 +45,8 @@
 
 文中的思维导图如果无法显示请先到Chrome web store 安装Github+Mermaid插件。
 
+- ./Notes：一些笔记
+
 ## 关于张量(tensor)以及CNN简便运算的一些解释
 
 ![Getting Started](./Notes/CNN2.jpg)
