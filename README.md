@@ -47,9 +47,9 @@
 
 ## 关于张量(tensor)以及CNN简便运算的一些解释
 
-![Getting Started](./CNN.jpg)
+![Getting Started](./Notes/CNN.jpg)
 
-![Getting Started](./tensors.png)
+![Getting Started](./Notes/tensors.png)
 
 ## 三、Accuracy and loss of the best CNN model(99.2%)
 
@@ -63,4 +63,4 @@
 
 ## 四、总结
 
-![Getting Started](./mindmap.jpg)
+![Getting Started](./Notes/mindmap.jpg)
