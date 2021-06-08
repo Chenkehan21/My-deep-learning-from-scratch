@@ -47,7 +47,7 @@
 
 - ./Notes：一些笔记
 
-## 关于张量(tensor)以及CNN简便运算的一些解释
+## 三、关于张量(tensor)以及CNN简便运算的一些解释
 
 ![Getting Started](./Notes/CNN2.jpg)
 
@@ -90,7 +90,7 @@ def im2col(input_data, filter_h, filter_w, stride=1, pad=0):
 
 ![Getting Started](./Notes/tensors.png)
 
-## 三、Accuracy and loss of the best CNN model(99.2%)
+## 四、Accuracy and loss of the best CNN model(99.2%)
 
 ### accuracy
 
@@ -100,6 +100,6 @@ def im2col(input_data, filter_h, filter_w, stride=1, pad=0):
 
 ![Getting Started](./Try/figures_73.3841/try_learning_bp_loss_60.png)
 
-## 四、总结
+## 五、总结
 
 ![Getting Started](./Notes/mindmap.jpg)
