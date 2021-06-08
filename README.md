@@ -45,6 +45,12 @@
 
 文中的思维导图如果无法显示请先到Chrome web store 安装Github+Mermaid插件。
 
+## 关于张量(tensor)以及CNN简便运算的一些解释
+
+![Getting Started](./CNN.jpg)
+
+![Getting Started](./tensors.png)
+
 ## 三、Accuracy and loss of the best CNN model(99.2%)
 
 ### accuracy
