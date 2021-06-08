@@ -47,6 +47,8 @@
 
 ## 关于张量(tensor)以及CNN简便运算的一些解释
 
+![Getting Started](./Notes/CNN2.jpg)
+
 ![Getting Started](./Notes/CNN.jpg)
 
 ![Getting Started](./Notes/tensors.png)
